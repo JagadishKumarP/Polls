@@ -20,3 +20,8 @@
 4. User should be able to select a poll and submit a response
 
 5. A simple reporting page to check the responses to a given poll
+
+#### Contribution Guide
+* Please fork this repo and submit a pull request
+
+* Please use github to raise any questions you might have
