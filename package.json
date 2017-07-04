@@ -1,0 +1,27 @@
+{
+  "name": "polls",
+  "version": "1.0.0",
+  "description": "POC of a Polling Application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shankarsiddharth/Polls.git"
+  },
+  "keywords": [
+    "polls",
+    "poll",
+    "poc",
+    "mean",
+    "mean",
+    "stack"
+  ],
+  "author": "Shankar Siddharth K A",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shankarsiddharth/Polls/issues"
+  },
+  "homepage": "https://github.com/shankarsiddharth/Polls#readme"
+}
