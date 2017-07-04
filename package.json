@@ -15,7 +15,6 @@
     "poll",
     "poc",
     "mean",
-    "mean",
     "stack"
   ],
   "author": "Shankar Siddharth K A",
@@ -23,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/shankarsiddharth/Polls/issues"
   },
-  "homepage": "https://github.com/shankarsiddharth/Polls#readme"
+  "homepage": "https://github.com/shankarsiddharth/Polls#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongoose": "^4.11.1"
+  }
 }
