@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var connectionString = "mongodb://localhost/polls";
+var connectionString = "mongodb://localhost/polldb";
 mongoose.connect(connectionString, {useMongoClient: true});
 
 var db = mongoose.connection;
@@ -22,10 +22,18 @@ var User = mongoose.model('User', userSchema);
 
 var pollSchema = mongoose.Schema({
   question: String,
-  response: Array
+  response: mongoose.Schema.Types.Mixed
 });
 var Poll = mongoose.model('Poll', pollSchema);
 
+var responseSchema = mongoose.Schema({
+  user_id: mongoose.Schema.Types.ObjectId,
+  poll_id: mongoose.Schema.Types.ObjectId,
+  response: String,
+  time: { type: Date, default: Date.now }
+});
+var Response = mongoose.model('Response', responseSchema);
 
 module.exports.db = db;
 module.exports.User = User;
+module.exports.Poll = Poll;
