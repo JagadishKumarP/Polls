@@ -22,13 +22,15 @@ var User = mongoose.model('User', userSchema);
 
 var pollSchema = mongoose.Schema({
   question: String,
-  response: mongoose.Schema.Types.Mixed
+  response: { type: mongoose.Schema.Types.Mixed, default: {'1':'YES','2':'NO'} }
 });
 var Poll = mongoose.model('Poll', pollSchema);
 
 var responseSchema = mongoose.Schema({
   user_id: mongoose.Schema.Types.ObjectId,
+  username: String,
   poll_id: mongoose.Schema.Types.ObjectId,
+  question: String,
   response: String,
   time: { type: Date, default: Date.now }
 });
@@ -37,3 +39,4 @@ var Response = mongoose.model('Response', responseSchema);
 module.exports.db = db;
 module.exports.User = User;
 module.exports.Poll = Poll;
+module.exports.Response = Response;

@@ -7,6 +7,7 @@ var app = express();
 var port = 3333;
 //app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('public'));
 //app.use(cors());
 
 var user = require('./routes/user');
@@ -17,7 +18,7 @@ var response = require('./routes/response');
 app.use('/response', response);
 
 app.get('/',function(req,res){
-    res.json({'success': true ,'message':'success'});
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(port, function () {
