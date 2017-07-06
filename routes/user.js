@@ -13,7 +13,7 @@ user.get('/', function (req, res) {
   res.json({ 'success': true, 'message': 'Users Home' });
 });
 
-user.post('/new', function (req, res) {
+/*user.post('/new', function (req, res) {
 
   var query = User.where({ username: req.body.username });
   query.findOne(function (err, doc) {
@@ -41,7 +41,45 @@ user.post('/new', function (req, res) {
     }
   });
 
-});
+});*/
+
+user.createNewUser = function (newuser) {
+  var query = User.where({ username: newuser.username });
+  var checkusername = new Promise(function (resolve, reject) {
+    query.findOne(function (err, doc) {
+      if (err) {
+        console.log(err);
+        reject({ 'success': false, 'message': 'Server Internal Error' });
+      }
+      if (doc == null) {
+        resolve(newuser);
+      } else {
+        reject({ 'success': false, 'message': 'Username is already taken. Try another one.' });
+      }
+    });
+  });
+  var saveuser = function (newuser) {
+    var newuserdata = new User({
+      username: newuser.username,
+      password: newuser.password,
+      is_admin: newuser.is_admin,
+      email_id: newuser.email_id
+    });
+
+    var savedata = new Promise(function (resolve, reject) {
+      newuserdata.save(function (err) {
+        if (err) {
+          console.log(err);
+          reject({ 'success': false, 'message': 'Server Internal Error' });
+        }
+        console.log('New User Created');
+        resolve({ 'success': true, 'message': 'Signed Up successfully' });
+      });
+    });
+    return savedata;
+  };
+  return checkusername.then(saveuser);
+}
 
 /* user.checkUser = function (user, callback) {
   var query = User.where({ username: user.username });
@@ -79,7 +117,7 @@ user.post('/new', function (req, res) {
 } */
 
 
-user.checkUserPromise = function (user) {
+user.checkUser = function (user) {
   var query = User.where({ username: user.username });
   var result = new Promise(function (resolve, reject) {
     query.findOne(function (err, doc) {

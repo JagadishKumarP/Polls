@@ -29,6 +29,7 @@ app.use(function (err, req, res, next) {
         res.status(401).json({ success: false, message: 'Unauthorized: Please login' });
     }
 });
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
@@ -44,7 +45,7 @@ app.post('/signin', function (req, res) {
             res.json(result);
         }        
     });*/
-    user.checkUserPromise(data)
+    user.checkUser(data)
         .then(function (result) {
             if (result.success) {
                 result.token = jwt.sign(result.user, app.get('hash'), { expiresIn: '1h' });
@@ -53,6 +54,16 @@ app.post('/signin', function (req, res) {
         }).catch(function (err) {
             console.log(err);
             res.json({ 'success': false, 'message': 'Server Internal Error' });
+        });
+});
+
+app.post('/signup', function (req, res) {
+    var data = req.body;
+    user.createNewUser(data)
+        .then(function (result) {
+            res.json(result);
+        }).catch(function (err) {
+            res.json(err);
         });
 });
 
