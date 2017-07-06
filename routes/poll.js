@@ -22,7 +22,11 @@ poll.get('/all', function (req, res) {
     if (docs == null) {
       res.json({ 'success': false, 'message': 'There are no polls' });
     } else {
-      res.json({ 'success': true, 'polls': docs });
+      if (docs.length == 0) {
+        res.json({ 'success': false, 'message': 'There are no polls' });
+      } else {
+        res.json({ 'success': true, 'message': 'Polls Fetched', 'polls': docs });
+      }
     }
   });
 
