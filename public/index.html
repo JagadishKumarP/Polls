@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Poll Application
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="/js/index.js"></script>
+</head>
+
+<body ng-app="pollApp">
+    <div ng-controller="pollCtrl">
+
+        <div class="container">
+            <nav class="navbar navbar-light bg-faded">
+                <h1 class="navbar-brand"><strong> Poll Application</strong></h1>
+            </nav>
+        </div>
+
+        <div class="container">
+
+            <!-- <div ng-hide="successMessageHide">
+                <div class="alert alert-success alert-dismissable" hidden>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success!</strong> {{successMessage}}
+                </div>
+            </div>
+            <div ng-hide="errorMessageHide">
+                <div class="alert alert-danger alert-dismissable" hidden>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error!</strong> {{errorMessage}}
+                </div>
+            </div> -->
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#createuser">Sign Up</a></li>
+                <li><a data-toggle="tab" href="#signin" ng-hide="signinhide">Sign In</a></li>
+                <li><a data-toggle="tab" href="#createpoll">Create Poll</a></li>
+                <li><a data-toggle="tab" href="#report">Report</a></li>
+                <li><a data-toggle="tab" href="#viewpolls">View Polls</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="createuser" class="tab-pane fade in active">
+                    <h3>Sign Up</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">Username *</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="username" ng-model="newuser.username" placeholder="Enter Username">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">Password *</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="password" ng-model="newuser.password" placeholder="Enter Password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">Email *</label>
+                                <div class="col-sm-5">
+                                    <input type="email" class="form-control" id="email" ng-model="newuser.email_id" placeholder="Enter email eg. abc@uvw.xyz">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <div class="checkbox">
+                                        <label>
+                                        <input ng-model="newuser.is_admin" type="checkbox"> 
+                                        <strong>Admin</strong>
+                                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Sign Up" ng-click="createuser(newuser)" ng-disabled="newuser.username == undefined || newuser.password == undefined || newuser.email_id == undefined"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div id="signin" class="tab-pane fade">
+                    <h3>Sign In</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">Username *</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" ng-model="user.username" id="username" placeholder="Enter Username">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">Password *</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" ng-model="user.password" id="password" placeholder="Enter Password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Sign In" ng-click="signin(user)" ng-disabled="user.username == undefined || user.password == undefined"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="createpoll" class="tab-pane fade">
+                    <h3>Create Poll</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="question" class="col-sm-2 control-label">Question *</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" cols="250" rows="5" id="question" ng-model="poll.question" placeholder="Enter your poll here. The default response will be ( YES | NO ), which will be added automatically to the question."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Create Poll" ng-click="createpoll(poll)" ng-disabled="poll.question == undefined"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="report" class="tab-pane fade">
+                    <h3>Report</h3>
+                    <div class="container">
+                        <input type="button" class="btn btn-primary" value="Get Report" ng-click="getreport()" />
+                        <br><br>
+                        <table class="table table-bordered" ng-hide="reports.length == 0">
+                            <tr>
+                                <th>Question</th>
+                                <th>Response</th>
+                                <th>User</th>
+                            </tr>
+                            <tr ng-repeat="report in reports">
+                                <td>{{report.question}}</td>
+                                <td>{{report.response}}</td>
+                                <td>{{report.username}}</td>
+                            </tr>
+                        </table>
+
+                        <div ng-show="reports.length == 0">
+                            <span>{{reportsMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewpolls" class="tab-pane fade">
+                    <h3>Polls</h3>
+                    <div class="container">
+                        <input type="button" class="btn btn-primary" value="Get Polls" ng-click="getpolls()" />
+                        <br><br>
+                        <table class="table table-bordered table-hover" ng-hide="polls.length == 0">
+                            <tr ng-repeat="poll in polls">
+                                <td>
+                                    <form>
+                                        <strong>{{poll.question}}</strong><br>
+                                        <label ng-repeat="option in poll.response">
+                                            <input type="radio" ng-model="poll.userresponse" ng-value="option" /> 
+                                            {{option}}
+                                        </label><br>
+                                        <input type="button" value="Respond" ng-disabled="poll.userresponse == undefined" ng-click="submitresponse(poll, $index)">
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                        <div ng-show="reports.length == 0">
+                            <span>{{pollsMessage}}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+
+</html>
