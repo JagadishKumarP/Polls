@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 const connectionString = "mongodb://localhost/polldb";
 mongoose.connect(connectionString, {useMongoClient: true});
