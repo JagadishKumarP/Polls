@@ -43,7 +43,7 @@ user.post('/new', function (req, res) {
 
 });
 
-user.checkUser = function (user, callback) {
+/* user.checkUser = function (user, callback) {
   var query = User.where({ username: user.username });
   query.findOne(function (err, doc) {
     var result = null;
@@ -76,6 +76,47 @@ user.checkUser = function (user, callback) {
     }
     return callback(err, result);
   });
+} */
+
+
+user.checkUserPromise = function (user) {
+  var query = User.where({ username: user.username });
+  var result = new Promise(function (resolve, reject) {
+    query.findOne(function (err, doc) {
+      var result = null;
+      if (err) {
+        reject(err);
+      }
+      if (doc == null) {
+        result = {
+          'success': false,
+          'message': 'No user with username found.'
+        };
+        resolve(result);
+      } else {
+        if (doc.password == user.password) {
+          result = {
+            'success': true,
+            'message': 'User found',
+            'user': {
+              _id: doc._id,
+              username: doc.username,
+              is_admin: doc.is_admin,
+              email_id: doc.email_id
+            }
+          };
+          resolve(result);
+        } else {
+          result = {
+            'success': false,
+            'message': 'Wrong Password'
+          };
+          resolve(result);
+        }
+      }
+    });
+  });
+  return result;
 }
 
 module.exports = user;

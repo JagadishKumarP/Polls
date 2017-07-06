@@ -17,21 +17,28 @@ app.use('/poll', poll);
 const response = require('./routes/response');
 app.use('/response', response);
 
-app.get('/',function(req,res){
+app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
-app.post('/signin',function(req,res){
+app.post('/signin', function (req, res) {
     var data = req.body;
     console.log(data);
-    var check = user.checkUser(data,function(err, result){
+    /*var check = user.checkUser(data,function(err, result){
         if(err){
             console.log(err);
             res.json({'success':false, 'message':'Server Internal Error'});
         }else{
             res.json(result);
         }        
-    });
+    });*/
+    user.checkUserPromise(data)
+        .then(function (result) {
+            res.json(result);
+        }).catch(function (err) {
+            console.log(err);
+            res.json({'success':false, 'message':'Server Internal Error'});
+        });
 });
 
 app.listen(port, function () {
