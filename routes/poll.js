@@ -3,7 +3,7 @@ const poll = express.Router();
 const mongoose = require('../db/db').mongoose;
 const pollSchema = mongoose.Schema({
   question: String,
-  response: { type: mongoose.Schema.Types.Mixed, default: {'1':'YES','2':'NO'} }
+  response: { type: mongoose.Schema.Types.Mixed, default: { '1': 'YES', '2': 'NO' } }
 });
 const Poll = mongoose.model('Poll', pollSchema);
 
@@ -12,16 +12,17 @@ poll.get('/', function (req, res) {
 });
 
 poll.get('/all', function (req, res) {
-  
+
   var query = Poll.where({}).sort('question');
   query.find(function (err, docs) {
     if (err) {
-      throw err;
+      console.log(err);
+      res.json({ 'success': false, 'message': 'Server Internal Error.' });
     }
     if (docs == null) {
       res.json({ 'success': false, 'message': 'There are no polls' });
     } else {
-      res.json({ 'success': true , 'polls': docs});
+      res.json({ 'success': true, 'polls': docs });
     }
   });
 
@@ -32,20 +33,20 @@ poll.post('/new', function (req, res) {
   var query = Poll.where({ question: req.body.question });
   query.findOne(function (err, doc) {
     if (err) {
-      throw err;
+      console.log(err);
+      res.json({ 'success': false, 'message': 'Server Internal Error.' });
     }
     if (doc == null) {
       var poll = new Poll({
         question: req.body.question
       });
 
-      poll.save(function (error) {
-        if (error) {
-          console.log('Some Error Occured');
-          throw error;
+      poll.save(function (err) {
+        if (err) {
+          console.log(err);
+          res.json({ 'success': false, 'message': 'Server Internal Error.' });
         }
-        console.log('New Poll Added');
-        res.json({ 'success': true });
+        res.json({ 'success': true, 'message': 'Poll question added.' });
       });
     } else {
       res.json({ 'success': false, 'message': 'Poll is already added. Try a new one.' });

@@ -16,24 +16,25 @@ response.get('/', function (req, res) {
 });
 
 response.get('/all', function (req, res) {
-  
+
   var query = Response.where({}).sort('username');
   query.find(function (err, docs) {
     if (err) {
-      throw err;
+      console.log(err);
+      res.json({ 'success': false, 'message': 'Server Internal Error.' });
     }
     if (docs == null || docs.length == 0) {
       res.json({ 'success': false, 'message': 'There are no responses.' });
     } else {
-      res.json({ 'success': true , 'responses': docs});
+      res.json({ 'success': true, 'message': 'Response(s) fetched for the poll.', 'responses': docs });
     }
   });
 
 });
 
 response.get('/:poll_id', function (req, res) {
-  
-  var query = Response.where({poll_id: req.params.poll_id}).sort('username');
+
+  var query = Response.where({ poll_id: req.params.poll_id }).sort('username');
   query.find(function (err, docs) {
     if (err) {
       throw err;
@@ -41,7 +42,7 @@ response.get('/:poll_id', function (req, res) {
     if (docs == null || docs.length == 0) {
       res.json({ 'success': false, 'message': 'There are no responses.' });
     } else {
-      res.json({ 'success': true , 'responses': docs});
+      res.json({ 'success': true, 'message': 'Response(s) fetched for the poll.', 'responses': docs });
     }
   });
 
@@ -56,13 +57,13 @@ response.post('/new', function (req, res) {
     response: req.body.response,
   });
 
-  response.save(function (error) {
-    if (error) {
+  response.save(function (err) {
+    if (err) {
       console.log('Some Error Occured');
-      throw error;
+      res.json({ 'success': false, 'message': 'Server Internal Error.' });
     }
     console.log('Response recorded');
-    res.json({ 'success': true });
+    res.json({ 'success': true, 'message': 'Recorded your response.' });
   });
 });
 

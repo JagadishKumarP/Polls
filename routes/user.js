@@ -54,7 +54,7 @@ user.createNewUser = function (newuser) {
       if (doc == null) {
         resolve(newuser);
       } else {
-        reject({ 'success': false, 'message': 'Username is already taken. Try another one.' });
+        reject({ 'success': false, 'message': 'Sorry, "' + newuser.username + '" is already taken. Please, try another one.' });
       }
     });
   });
@@ -72,8 +72,7 @@ user.createNewUser = function (newuser) {
           console.log(err);
           reject({ 'success': false, 'message': 'Server Internal Error' });
         }
-        console.log('New User Created');
-        resolve({ 'success': true, 'message': 'Signed Up successfully' });
+        resolve({ 'success': true, 'message': 'Sign Up successful. Please, Sign In to continue.' });
       });
     });
     return savedata;
@@ -123,19 +122,16 @@ user.checkUser = function (user) {
     query.findOne(function (err, doc) {
       var result = null;
       if (err) {
+        console.log(err);
         reject(err);
       }
       if (doc == null) {
-        result = {
-          'success': false,
-          'message': 'No user with username found.'
-        };
-        resolve(result);
+        resolve({ 'success': false, 'message': 'No user found with the username: "' + user.username + '"' });
       } else {
         if (doc.password == user.password) {
           result = {
             'success': true,
-            'message': 'User found',
+            'message': 'Welcome, ' + doc.username,
             'user': {
               _id: doc._id,
               username: doc.username,
@@ -145,11 +141,7 @@ user.checkUser = function (user) {
           };
           resolve(result);
         } else {
-          result = {
-            'success': false,
-            'message': 'Wrong Password'
-          };
-          resolve(result);
+          resolve({ 'success': false, 'message': 'Wrong Password, enter the correct password.' });
         }
       }
     });
