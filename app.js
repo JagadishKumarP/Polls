@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/db');
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt');
-//const cors = require('cors');
+const cors = require('cors');
 
 const app = express();
 const port = 3333;
@@ -11,7 +11,7 @@ app.set('hash', 'secret');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-//app.use(cors());
+app.use(cors());
 
 const user = require('./routes/user');
 app.use('/user', expressJwt({ secret: app.get('hash') }));

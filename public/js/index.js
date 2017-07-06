@@ -48,7 +48,7 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
         $http.post('/signin', user)
             .then(function success(response) {
                 autoCloseMessage(response.data.success, response.data.message);
-                console.log(response.data);
+                //console.log(response.data);
                 if (response.data.success) {
                     $rootScope.userdetails = response.data.user;
                     $rootScope.token = response.data.token;
@@ -78,7 +78,7 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
                 }
             }, function error(response) {
                 autoCloseMessage(false, 'Server Internal Error');
-                console.log(response.statusText);
+                console.error(response.statusText);
             });
     }
 
@@ -98,15 +98,15 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
     }
 
     $scope.createpoll = function (poll) {
-        console.log(poll);
+        //console.log(poll);
         $scope.poll = null;
         $http.post('/poll/new', poll)
             .then(function success(response) {
                 autoCloseMessage(response.data.success, response.data.message);
-                console.log(response.data);
+                //console.log(response.data);
             }, function error(response) {
                 autoCloseMessage(response.data.success, response.data.message);
-                console.log(response.statusText);
+                console.error(response.statusText);
             });
     }
 
@@ -121,7 +121,7 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
                 }
             }, function error(response) {
                 autoCloseMessage(response.data.success, response.data.message);
-                console.log(response.statusText);
+                console.error(response.statusText);
             });
     }
 
@@ -141,15 +141,12 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
     var getpollresponse = function (pollid, i) {
         $http.get('/response/' + pollid)
             .then(function success(response) {
-                console.log("i is" + i);
                 if (response.data.success) {
                     $scope.pollresponse[i] = response.data.responses;
                     $scope.pollresponse[i].show = false;
-                } else {
-                    $scope.pollresponse[i].show = false;
                 }
             }, function error(response) {
-                console.log(response.statusText);
+                console.error(response.statusText);
             });
     }
 
@@ -179,10 +176,10 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
                 autoCloseMessage(response.data.success, response.data.message);
                 if (response.data.success) {
                     $scope.polls = response.data.polls;
-                    console.log($scope.polls);
+                    //console.log($scope.polls);
                 } else {
                     $scope.pollsMessage = response.data.message;
-                    console.log($scope.pollsMessage);
+                    //console.log($scope.pollsMessage);
                 }
             }, function error(response) {
                 autoCloseMessage(response.data.success, response.data.message);
@@ -191,8 +188,8 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
     }
 
     $scope.submitresponse = function (poll, index) {
-        console.log(poll);
-        console.log(index);
+        //console.log(poll);
+        //console.log(index);
         var userresponse = {
             'user_id': $rootScope.userdetails._id,
             'username': $rootScope.userdetails.username,
@@ -203,9 +200,9 @@ app.controller('pollCtrl', function ($scope, $http, $rootScope) {
         $http.post('/response/new', userresponse)
             .then(function success(response) {
                 autoCloseMessage(response.data.success, response.data.message);
-                console.log(response.data);
+                //console.log(response.data);
             }, function error(response) {
-                console.log(response.statusText);
+                console.error(response.statusText);
                 autoCloseMessage(response.data.success, response.data.message);
             });
     }
