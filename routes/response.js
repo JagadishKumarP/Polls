@@ -1,6 +1,15 @@
-var express = require('express');
-var response = express.Router();
-var Response = require('../db/db').Response;
+const express = require('express');
+const response = express.Router();
+const mongoose = require('../db/db').mongoose;
+const responseSchema = mongoose.Schema({
+  user_id: mongoose.Schema.Types.ObjectId,
+  username: String,
+  poll_id: mongoose.Schema.Types.ObjectId,
+  question: String,
+  response: String,
+  time: { type: Date, default: Date.now }
+});
+const Response = mongoose.model('Response', responseSchema);
 
 response.get('/', function (req, res) {
   res.json({ 'success': true, 'message': 'Response Home' });

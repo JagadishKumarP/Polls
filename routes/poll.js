@@ -1,6 +1,11 @@
-var express = require('express');
-var poll = express.Router();
-var Poll = require('../db/db').Poll;
+const express = require('express');
+const poll = express.Router();
+const mongoose = require('../db/db').mongoose;
+const pollSchema = mongoose.Schema({
+  question: String,
+  response: { type: mongoose.Schema.Types.Mixed, default: {'1':'YES','2':'NO'} }
+});
+const Poll = mongoose.model('Poll', pollSchema);
 
 poll.get('/', function (req, res) {
   res.json({ 'success': true, 'message': 'Poll Home' });
@@ -31,11 +36,7 @@ poll.post('/new', function (req, res) {
     }
     if (doc == null) {
       var poll = new Poll({
-        question: req.body.question,
-        response: {
-          'YES': true,
-          'NO': false
-        }
+        question: req.body.question
       });
 
       poll.save(function (error) {
