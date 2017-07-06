@@ -59,10 +59,9 @@ response.post('/new', function (req, res) {
 
   response.save(function (err) {
     if (err) {
-      console.log('Some Error Occured');
+      console.log(err);
       res.json({ 'success': false, 'message': 'Server Internal Error.' });
     }
-    console.log('Response recorded');
     res.json({ 'success': true, 'message': 'Recorded your response.' });
   });
 });
