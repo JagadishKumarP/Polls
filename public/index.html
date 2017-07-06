@@ -37,7 +37,7 @@
                 <li class="active"><a data-toggle="tab" href="#signin" ng-hide="hide.signin"><strong> Sign In </strong></a></li>
                 <li><a data-toggle="tab" href="#createuser" ng-hide="hide.createuser"><strong> Sign Up </strong></a></li>
                 <li><a data-toggle="tab" href="#createpoll" ng-hide="hide.createpoll"><strong> Create Poll </strong></a></li>
-                <li><a data-toggle="tab" href="#report"  ng-hide="hide.report" ng-click="getpollsandresponse()"><strong> Report </strong></a></li>
+                <li><a data-toggle="tab" href="#report" ng-hide="hide.report" ng-click="getpollsandresponse()"><strong> Report </strong></a></li>
                 <li><a data-toggle="tab" href="#viewpolls" ng-hide="hide.viewpolls" ng-click="getpolls()"><strong> View Polls </strong></a></li>
                 <li><a data-toggle="tab" href="#signout" ng-hide="hide.signout"><strong> Sign Out </strong></a></li>
             </ul>
@@ -149,7 +149,7 @@
                                         <br>
                                         <div class="col-sm-4">
                                             <div ng-if="!(pollresponse[$index].length == 0 || pollresponse[$index] == undefined || pollresponse[$index] == [])">
-                                                <input type="button" class="btn btn-info form-control" id="showresponse_{{$index}}" value="Show Response(s)" ng-click="showresponses(poll, $index)">                                            
+                                                <input type="button" class="btn btn-info form-control" id="showresponse_{{$index}}" value="Show Response(s)" ng-click="showresponses(poll, $index)">
                                             </div>
                                             <div ng-if="(pollresponse[$index].length == 0 || pollresponse[$index] == undefined || pollresponse[$index] == [])">
                                                 <label>No response(s) for this poll yet.</label>
