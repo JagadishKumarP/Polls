@@ -1,5 +1,7 @@
 const express = require('express');
 const user = express.Router();
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
 const mongoose = require('../db/db').mongoose;
 const userSchema = mongoose.Schema({
   username: String,
@@ -58,10 +60,23 @@ user.createNewUser = function (newuser) {
       }
     });
   });
+  var hashpassword = function (newuser) {
+    var hp = new Promise(function (resolve, reject) {
+      bcrypt.hash(newuser.password, saltRounds, function (err, hash) {
+        if (err) {
+          console.log(err);
+          reject({ 'success': false, 'message': 'Server Internal Error. Password Hash failure.' });
+        }
+        newuser.passwordHash = hash;
+        resolve(newuser);
+      });
+    });
+    return hp;
+  }
   var saveuser = function (newuser) {
     var newuserdata = new User({
       username: newuser.username,
-      password: newuser.password,
+      password: newuser.passwordHash,
       is_admin: newuser.is_admin,
       email_id: newuser.email_id
     });
@@ -77,7 +92,7 @@ user.createNewUser = function (newuser) {
     });
     return savedata;
   };
-  return checkusername.then(saveuser);
+  return checkusername.then(hashpassword).then(saveuser);
 }
 
 /* user.checkUser = function (user, callback) {
@@ -128,21 +143,23 @@ user.checkUser = function (user) {
       if (doc == null) {
         resolve({ 'success': false, 'message': 'No user found with the username: "' + user.username + '"' });
       } else {
-        if (doc.password == user.password) {
-          result = {
-            'success': true,
-            'message': 'Welcome, ' + doc.username,
-            'user': {
-              _id: doc._id,
-              username: doc.username,
-              is_admin: doc.is_admin,
-              email_id: doc.email_id
-            }
-          };
-          resolve(result);
-        } else {
-          resolve({ 'success': false, 'message': 'Wrong Password, enter the correct password.' });
-        }
+        bcrypt.compare(user.password, doc.password).then(function (res) {
+          if (res == true) {
+            result = {
+              'success': true,
+              'message': 'Welcome, ' + doc.username,
+              'user': {
+                _id: doc._id,
+                username: doc.username,
+                is_admin: doc.is_admin,
+                email_id: doc.email_id
+              }
+            };
+            resolve(result);
+          } else {
+            resolve({ 'success': false, 'message': 'Wrong Password, enter the correct password.' });
+          }
+        });
       }
     });
   });
