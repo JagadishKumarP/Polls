@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Poll Application
+    </title>
+    <link rel="icon" href="favicon.png" type="image/png" sizes="16x16">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="/js/index.js"></script>
+</head>
+
+<body ng-app="pollApp">
+    <div ng-controller="pollCtrl">
+
+        <div class="container">
+            <nav class="navbar navbar-light bg-faded">
+                <h1 class="navbar-brand">
+                    <img src="favicon.png" width="30" height="30" class="d-inline-block align-left" alt="">
+                <strong>Poll Application</strong>
+                </h1>
+            </nav>
+        </div>
+
+        <div class="container">
+
+            <div class="alert alert-success alert-dismissable" id="successMessageHide" hidden>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> {{successMessage}}
+            </div>
+
+            <div class="alert alert-danger alert-dismissable" id="errorMessageHide" hidden>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error!</strong> {{errorMessage}}
+            </div>
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#signin" ng-hide="hide.signin"><strong> Sign In </strong></a></li>
+                <li><a data-toggle="tab" href="#createuser" ng-hide="hide.createuser"><strong> Sign Up </strong></a></li>
+                <li><a data-toggle="tab" href="#createpoll" ng-hide="hide.createpoll"><strong> Create Poll </strong></a></li>
+                <li><a data-toggle="tab" href="#report" ng-hide="hide.report" ng-click="getpollsandresponse()"><strong> Report </strong></a></li>
+                <li><a data-toggle="tab" href="#viewpolls" ng-hide="hide.viewpolls" ng-click="getpolls()"><strong> View Polls </strong></a></li>
+                <li><a data-toggle="tab" href="#signout" ng-hide="hide.signout"><strong> Sign Out </strong></a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="createuser" class="tab-pane fade">
+                    <h3>Sign Up</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">Username *</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="username" ng-model="newuser.username" placeholder="Enter Username" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">Password *</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="password" ng-model="newuser.password" placeholder="Enter Password" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="col-sm-2 control-label">Email *</label>
+                                <div class="col-sm-5">
+                                    <input type="email" class="form-control" id="email" ng-model="newuser.email_id" placeholder="Enter email eg. abc@uvw.xyz"
+                                        required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <div class="checkbox">
+                                        <label>
+                                        <input ng-model="newuser.is_admin" type="checkbox"> 
+                                        <strong>Admin</strong>
+                                    </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Sign Up" ng-click="createuser(newuser)" ng-disabled="newuser.username == undefined || newuser.password == undefined || newuser.email_id == undefined"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div id="signin" class="tab-pane fade in active">
+                    <h3>Sign In</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">Username *</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" ng-model="user.username" id="username" placeholder="Enter Username" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">Password *</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" ng-model="user.password" id="password" placeholder="Enter Password" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Sign In" ng-click="signin(user)" ng-disabled="user.username == undefined || user.password == undefined"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="createpoll" class="tab-pane fade">
+                    <h3>Create Poll</h3>
+                    <div class="container well">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="question" class="col-sm-2 control-label">Question *</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" cols="250" rows="5" id="question" ng-model="poll.question" placeholder="Enter your poll here. The default response will be ( YES | NO ), which will be added automatically to the question."
+                                        required="required"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-5">
+                                    <input type="button" class="btn btn-primary" value="Create Poll" ng-click="createpoll(poll)" ng-disabled="poll.question == undefined || poll.question == '' "
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="report" class="tab-pane fade">
+                    <h3>Report</h3>
+                    <div class="container">
+                        <!--<input type="button" class="btn btn-primary" value="Refresh" ng-show="polls.length > 0 || polls != undefined" ng-click="getpolls()"
+                        />-->
+                        <br><br>
+                        <table class="table table-bordered" ng-hide="polls.length == 0">
+                            <tr ng-repeat="poll in polls">
+                                <td>
+                                    <form class="form-horizontal">
+                                        <strong>{{poll.question}}</strong><br>
+                                        <br>
+                                        <div class="col-sm-4">
+                                            <div ng-if="!(pollresponse[$index].length == 0 || pollresponse[$index] == undefined || pollresponse[$index] == [])">
+                                                <input type="button" class="btn btn-info form-control" id="showresponse_{{$index}}" value="Show Response(s)" ng-click="showresponses(poll, $index)">
+                                            </div>
+                                            <div ng-if="(pollresponse[$index].length == 0 || pollresponse[$index] == undefined || pollresponse[$index] == [])">
+                                                <label>No response(s) for this poll yet.</label>
+                                            </div>
+                                            <br><br>
+                                            <table class="table table-bordered" ng-if="pollresponse[$index].show">
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Response</th>
+                                                </tr>
+                                                <tr ng-repeat="pr in pollresponse[$index]">
+                                                    <td>{{pr.username}}</td>
+                                                    <td>{{pr.response}}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                        <div ng-show="polls.length == 0 || polls == undefined">
+                            <span>{{pollsMessage}}. Please, add some polls in <strong>"Create Poll"</strong> tab.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="viewpolls" class="tab-pane fade">
+                    <h3>Polls</h3>
+                    <div class="container">
+                        <!--<input type="button" class="btn btn-primary" value="Get Polls" ng-click="getpolls()" />-->
+                        <br><br>
+                        <table class="table table-bordered table-hover" ng-hide="polls.length == 0">
+                            <tr ng-repeat="poll in polls">
+                                <td>
+                                    <form class="form-horizontal">
+                                        <strong>{{poll.question}}</strong><br>
+                                        <div class="radio" ng-repeat="option in poll.response">
+                                            <label>
+                                                <input type="radio" ng-model="poll.userresponse" ng-value="option" /> 
+                                                {{option}}
+                                            </label>
+                                        </div>
+                                        <br>
+                                        <div class="col-sm-5">
+                                            <input type="button" class="btn btn-success form-control" value="Respond" ng-disabled="poll.userresponse == undefined" ng-click="submitresponse(poll, $index)">
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                        <div ng-show="polls.length == 0 || polls == undefined">
+                            <span>{{pollsMessage}}. Please, ask admin to add some polls. Or, add some polls using admin user.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="signout" class="tab-pane fade">
+                    <h3>Sign Out</h3>
+                    <div class="container">
+                        <input type="button" class="btn btn-danger" value="Sign Out" ng-click="signout()" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+
+</html>
